@@ -4,7 +4,7 @@
 # アプリケーションの動作モード (development, staging, production)
 ENV=development
 
-# データベース接続情報: 各自の環境で適切なパスワード、ホストを設定してください
+# データベース接続情報: 各自の環境で適切なパスワード、ホストを設定
 POSTGRES_USER=user_name
 POSTGRES_PASSWORD=
 POSTGRES_DB=db_name

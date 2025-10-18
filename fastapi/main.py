@@ -18,13 +18,13 @@ async def root():
 
 @app.get("/hello")
 async def say_hello(name: str) -> Dict[str, str]:
-    # ユーザーが要求した通り、パスパラメータ 'name' の値を返します
+    # ユーザーが要求した通り、パスパラメータ 'name' の値を返却
     return {"return_value": name}
 
 
 @app.get("/hello/{name}")
 async def say_hello(name: str) -> Dict[str, str]:
-    # ユーザーが要求した通り、パスパラメータ 'name' の値を返します
+    # ユーザーが要求した通り、パスパラメータ 'name' の値を返却
     return {"return_value": name}
 
 
