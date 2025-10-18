@@ -1,0 +1,50 @@
+services:
+  # FastAPI
+  backend:
+    build: . # Dockerfileビルド
+    container_name: fastapi
+    ports:
+      - "${APP_HOST_PORT}:8000"
+    tty: true
+    restart: always
+    # 環境変数: FastAPIコード内で使用されるDB接続情報。dbと一致させる。
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    # dbの起動待機
+    depends_on:
+      db:
+        condition: service_healthy
+    # ボリューム
+    volumes:
+      - ./fastapi:/app
+
+  # PostgreSQL
+  db:
+    image: postgres:16 #dev:alpine
+    container_name: postgres-db
+    ports:
+      - "${DB_HOST_PORT}:5432"
+    # 環境変数: データベースの初期設定
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    # データを永続化するためのボリューム
+    volumes:
+      # ボリューム名を指定してデータをホストOS上に保持
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+# 永続化用のボリュームを定義 (データベースデータ用)
+volumes:
+  postgres_data:

@@ -1,0 +1,53 @@
+# -------------------------
+# Python
+# -------------------------
+# Python バイトコードキャッシュ
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pytest_cache/
+*.mypy_cache/
+*.coverage
+*.cache
+
+# -------------------------
+# Virtual Environments
+# -------------------------
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+pythonenv*
+
+# -------------------------
+# IDE / Editor
+# -------------------------
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# -------------------------
+# OS specific
+# -------------------------
+.DS_Store
+Thumbs.db
+
+# -------------------------
+# Docker
+# -------------------------
+*.log
+*.pid
+docker-compose.override.yml
+**/docker-compose.override.yml
+
+# -------------------------
+# SQLAlchemy / Alembic
+# -------------------------
+
+versions/__pycache__/*.pyc   # コンパイル済みは無視
