@@ -25,8 +25,10 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # fa
 # ------------------------------------------------
 # モデルのインポート
 # ------------------------------------------------
-from db.models import BaseModel
-from settings import Settings
+from db.models.base import Base
+
+from settings import settings
+from db.session import async_engine
 
 
 # .envファイルを読み込み
@@ -39,18 +41,22 @@ load_dotenv(dotenv_path=os.path.join(PROJECT_ROOT, ".env"))
 # Alembic Configオブジェクト（設定情報を格納）
 config = context.config
 
-
-# settings.pyから非同期用のURLを取得
-settings_instance = Settings()
-
-config.set_main_option("sqlalchemy.url", settings_instance.database_url)
+# Alembicの接続先DB情報設定
+config.set_main_option("sqlalchemy.url", settings.database_url)
 
 # ロギング設定
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 # target_metadata設定：最新のデータベース設計図（DBとの差分）
-target_metadata = BaseModel.metadata
+target_metadata = Base.metadata
+
+
+def include_object(obj, name, type_, reflected, compare_to):
+    if obj.info.get("skip_autogen", False):
+        return False
+
+    return True
 
 
 # ------------------------------------------------
@@ -67,6 +73,11 @@ def run_migrations_offline() -> None:
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        # MATERIALIZED VIEW など無視する場合は下記をクラス属性に設定する
+        # __table_args__ = {"info": {"skip_autogen": True}}
+        include_object=include_object,
+        # 型変更を検知する
+        compare_type=True,
     )
 
     with context.begin_transaction():
@@ -74,7 +85,16 @@ def run_migrations_offline() -> None:
 
 
 def do_run_migrations(connection: Connection) -> None:
-    context.configure(connection=connection, target_metadata=target_metadata)
+    context.configure(
+        connection=connection,
+        target_metadata=target_metadata,
+        dialect_opts={"paramstyle": "named"},
+        # MATERIALIZED VIEW など無視する場合は下記をクラス属性に設定する
+        # __table_args__ = {"info": {"skip_autogen": True}}
+        include_object=include_object,
+        # 型変更を検知する
+        compare_type=True,
+    )
 
     with context.begin_transaction():
         context.run_migrations()
@@ -86,11 +106,7 @@ async def run_async_migrations() -> None:
     接続（Connection）を確立してAlembicのコンテキストに関連付ける。
     """
 
-    connectable = async_engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
-    )
+    connectable = async_engine
 
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)

@@ -29,5 +29,5 @@ class Settings(BaseSettings):
         url = f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
         return url
 
-
-settings = Settings()
+# グローバル変数に保持
+settings = Settings.model_validate({})
