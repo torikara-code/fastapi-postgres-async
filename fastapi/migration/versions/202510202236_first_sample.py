@@ -1,8 +1,8 @@
-"""sample1
+"""first-sample
 
-Revision ID: 55b12690cf5b
+Revision ID: 7fb4daea507f
 Revises: 
-Create Date: 2025-10-20 00:43:18.827063+09:00
+Create Date: 2025-10-20 22:36:05.281349+09:00
 
 # ------------------------------------------------
 # DB Schema Migration
@@ -16,7 +16,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '55b12690cf5b'
+revision: str = '7fb4daea507f'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
