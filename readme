@@ -13,7 +13,7 @@ POSTGRES_DB=db_name
 APP_HOST_PORT=8000
 DB_HOST_PORT=5433
 
-# JWTトークン署名用の秘密鍵
+# JWTトークン署名用の秘密鍵（未実装）
 SECRET_KEY="YOUR_SUPER_SECRET_KEY_HERE"
 
 
@@ -22,7 +22,7 @@ SECRET_KEY="YOUR_SUPER_SECRET_KEY_HERE"
 # .env作成後以下の手順でローカル環境構築
 
 1.  GitHubからリポジトリをクローン
-2.  **`.env.example`** の内容をコピーし、**`.env`** という名前でファイルを作成
+2.  **`.env.example`** の内容をコピーし、**`.env`** ファイルをルートディレクトリ(×：fastapi)作成
 3.  `.env`ファイル内の変数の値を、**自分の環境（またはテスト環境）に合わせた正しい値**に置換
 4.  `docker-compose up`を実行し、FastAPIとPostgreSQLを起動
 
