@@ -1,6 +1,7 @@
 # ------------------------------------------------------------------
 # 環境設定テンプレート(.env)
 # ------------------------------------------------------------------
+```
 # アプリケーションの動作モード (development, staging, production)
 ENV=development
 
@@ -8,6 +9,7 @@ ENV=development
 POSTGRES_USER=user_name
 POSTGRES_PASSWORD=
 POSTGRES_DB=db_name
+POSTGRES_HOST=host_db_name
 
 # ポート情報: ホストPCで空いているポートを指定
 APP_HOST_PORT=8000
@@ -15,7 +17,7 @@ DB_HOST_PORT=5433
 
 # JWTトークン署名用の秘密鍵（未実装）
 SECRET_KEY="YOUR_SUPER_SECRET_KEY_HERE"
-
+```
 
 #### B. 開発者は上記テンプレートを使って `.env` を作る
 
@@ -26,7 +28,12 @@ SECRET_KEY="YOUR_SUPER_SECRET_KEY_HERE"
 3.  `.env`ファイル内の変数の値を、**自分の環境（またはテスト環境）に合わせた正しい値**に置換
 4.  `docker-compose up`を実行し、FastAPIとPostgreSQLを起動
 
-### 【Tips】 本番環境でのenv設定について
+
+本テンプレート作成において、
+[async-fastapi-sqlalchemy](https://github.com/rhoboro/async-fastapi-sqlalchemy) MIT License
+こちらのコードを参考に作成いたしました。
+
+### Todo:本番環境でのenv設定について
 
 本番環境やCI/CDパイプラインでは、さらにセキュリティを強化するために、`.env`ファイルを使わずに設定を渡す
 
