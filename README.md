@@ -1,6 +1,9 @@
 # ------------------------------------------------------------------
+
 # 環境設定テンプレート(.env)
+
 # ------------------------------------------------------------------
+
 ```
 # アプリケーションの動作モード (development, staging, production)
 ENV=development
@@ -21,26 +24,30 @@ SECRET_KEY="YOUR_SUPER_SECRET_KEY_HERE"
 
 #### B. 開発者は上記テンプレートを使って `.env` を作る
 
-# .env作成後以下の手順でローカル環境構築
+# .env 作成後以下の手順でローカル環境構築
 
-1.  GitHubからリポジトリをクローン
+1.  GitHub からリポジトリをクローン
 2.  **`.env.example`** の内容をコピーし、**`.env`** ファイルをルートディレクトリ(×：fastapi)作成
 3.  `.env`ファイル内の変数の値を、**自分の環境（またはテスト環境）に合わせた正しい値**に置換
-4.  `docker-compose up`を実行し、FastAPIとPostgreSQLを起動
+4.  `docker-compose up`を実行し、FastAPI と PostgreSQL を起動
 
+### Todo:本番環境での env 設定について
+
+本番環境や CI/CD パイプラインでは、さらにセキュリティを強化するために、`.env`ファイルを使わずに設定を渡す
+
+- **Docker Compose の場合:**
+  `docker-compose.yml`で定義した`environment`変数は、デプロイ時に**シェル環境変数**から取得する
+  ```bash
+  # デプロイサーバーのシェルで設定
+  export POSTGRES_PASSWORD="prod_secure_password"
+  # その後、docker-compose up を実行
+  docker-compose up -d
+  ```
+
+# OSS ライセンス (MIT)
 
 本テンプレート作成において、
-[async-fastapi-sqlalchemy](https://github.com/rhoboro/async-fastapi-sqlalchemy) MIT License
+
+- [async-fastapi-sqlalchemy](https://github.com/rhoboro/async-fastapi-sqlalchemy) — MIT License
+
 こちらのコードを参考に作成いたしました。
-
-### Todo:本番環境でのenv設定について
-
-本番環境やCI/CDパイプラインでは、さらにセキュリティを強化するために、`.env`ファイルを使わずに設定を渡す
-
-* **Docker Composeの場合:**
-    `docker-compose.yml`で定義した`environment`変数は、デプロイ時に**シェル環境変数**から取得する
-    ```bash
-    # デプロイサーバーのシェルで設定
-    export POSTGRES_PASSWORD="prod_secure_password"
-    # その後、docker-compose up を実行
-    docker-compose up -d
