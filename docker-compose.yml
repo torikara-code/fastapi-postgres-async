@@ -20,7 +20,7 @@ services:
         condition: service_healthy
     # ボリューム
     volumes:
-      - ./fastapi:/app
+      - ./fastapi:/app/fastapi
 
   # PostgreSQL
   db:

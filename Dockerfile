@@ -1,4 +1,4 @@
-# Debianベースの軽量なPythonイメージを使用
+# Debianベースのpythonイメージ
 FROM python:3.12-slim
 
 # 作業ディレクトリをコンテナ内に設定
@@ -18,6 +18,7 @@ RUN apt-get update \
   build-essential \
   libpq-dev \
   python3-dev \
+  postgresql-client \
   && pip install --upgrade pip
 
 # Python依存関係をインストール
@@ -35,7 +36,9 @@ RUN apt-get purge -y --auto-remove build-essential libpq-dev python3-dev \
 # アプリケーションコードのコピー
 # ------------------------------------------------------------------
 
-COPY . /app
+COPY fastapi/ /app/fastapi/
+COPY config/entrypoint.sh /app/config/entrypoint.sh
+RUN chmod +x /app/config/entrypoint.sh
 
 # ------------------------------------------------------------------
 # ポートと起動コマンド (FastAPI/Uvicorn用)
@@ -44,8 +47,4 @@ COPY . /app
 # Uvicornがデフォルトで使用するポートを公開
 EXPOSE 8000
 
-# コンテナ起動時に実行
-# "main:app"の部分は、FastAPIインスタンスが定義されている実際のモジュールと変数名に置換
-# --reload :開発時のホットリロードを有効
-# ※※※Todo:本番環境では --reload を削除
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+ENTRYPOINT ["/app/config/entrypoint.sh"]
