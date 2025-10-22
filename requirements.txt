@@ -8,7 +8,6 @@ SQLAlchemy==2.0.30
 SQLAlchemy-Utils==0.41.2
 alembic==1.13.1 #migration
 asyncpg==0.29.0 #非同期
-psycopg2-binary==2.9.9 #同期
 
 # Validation, Settings, Utility
 pydantic[email]==2.6.0 #入出力
