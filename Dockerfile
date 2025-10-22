@@ -8,11 +8,7 @@ WORKDIR /app
 COPY requirements.txt .
 
 # システム依存関係のインストールとPythonパッケージのインストール
-# slim (Debian) 環境でのC拡張ビルドに必要なパッケージをインストール
-# - gcc, g++: C/C++ コンパイラ (ビルドツールチェーン)
-# - libpq-dev: PostgreSQLライブラリの開発ファイル
-# - python3-dev: Pythonのヘッダーファイル
-# インストール後に不要になったaptのキャッシュを削除し、イメージサイズを小さく保持
+# --no-install-recommends → 依存関係のうち必須でないパッケージは入れない
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
   build-essential \
@@ -28,7 +24,7 @@ RUN pip install --no-cache-dir -r requirements.txt \
   python-jose[cryptography]==3.3.0
 
 # ビルド時にインストールしたシステムパッケージはランタイムでは不要、削除してイメージサイズを最適化
-# libpq5 (libpq-devのランタイム部分) は残し、それ以外を削除
+# libpq-devは残し、それ以外を削除
 RUN apt-get purge -y --auto-remove build-essential libpq-dev python3-dev \
   && rm -rf /var/lib/apt/lists/*
 
